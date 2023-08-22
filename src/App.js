@@ -1,10 +1,17 @@
-
+import { Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing";
+import Todo from "./pages/Todo";
+import GlobalStyle from "./GlobalStyle";
 
 function App() {
   return (
-    <div className="App">
-      App
-    </div>
+    <>
+      <GlobalStyle />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/todo" element={<Todo />} />
+      </Routes>
+    </>
   );
 }
 

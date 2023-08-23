@@ -2,11 +2,9 @@ import Instance from "./instance";
 
 const todoAPI = () => {
 
-    const { axiosAPI, authAxiosAPI } = Instance();
-
     const createTodo = async (todo) => {
         try {
-            await axiosAPI.post('', todo)
+            await Instance.post('', todo)
         } catch (error) {
             console.error(error)
         }
@@ -14,7 +12,7 @@ const todoAPI = () => {
 
     const updateTodo = async (todo, id) => {
         try {
-            await axiosAPI.patch(`/${id}`, todo)
+            await Instance.patch(`/${id}`, todo)
         } catch (error) {
             console.error(error)
         }
@@ -22,7 +20,7 @@ const todoAPI = () => {
 
     const deleteTodo = async (id) => {
         try {
-            await axiosAPI.delete(`/${id}`)
+            await Instance.delete(`/${id}`)
         } catch (error) {
             console.error(error)
         }
@@ -30,7 +28,7 @@ const todoAPI = () => {
 
     const getTodo = async () => {
         try {
-            const res = await authAxiosAPI.get();
+            const res = await Instance.get("?offset=0&limit=50");
             return res.data;
         } catch (error) {
             console.error(error)

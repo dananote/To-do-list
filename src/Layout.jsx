@@ -1,10 +1,9 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
 import { styled, css } from "styled-components";
 
 const Layout = styled.article`
   position: absolute;
-  width: 60%;
+  width: 70%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

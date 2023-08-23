@@ -2,6 +2,7 @@ import React from "react";
 import { styled } from "styled-components";
 import CreateTodo from "../components/CreateTodo";
 import TodoBox from "../components/TodoBox";
+import TodoList from "../components/TodoList";
 
 const Todo = () => {
   return (
@@ -9,7 +10,7 @@ const Todo = () => {
       <h1>Todo</h1>
       <SSubText>오늘 당신이 해야할 일을 체크해주세요!</SSubText>
       <CreateTodo />
-      <TodoBox />
+      <TodoList />
     </>
   );
 };

@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { styled, css } from "styled-components";
 import Input from "./Input";
 import Button from "./Button";
-import { useRecoilValue } from "recoil";
 import checkMobile from "../atom/checkMobile";
 import todoAPI from "../api/todoAPI";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import checkCount from "../atom/checkCount";
 import checkChange from "../atom/checkChange";
 
 const CreateTodo = () => {
   const isMobile = useRecoilValue(checkMobile);
+  const isCount = useRecoilValue(checkCount);
   const { createTodo } = todoAPI();
   const [todo, setTodo] = useState({ content: "" });
   const [isChange, setIsChange] = useRecoilState(checkChange);
@@ -21,12 +22,16 @@ const CreateTodo = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTodo((prev) => ({
-      ...prev,
-      content: "",
-    }));
+    if (isCount === 10) {
+      alert("[할 일]은 최대 10개까지 등록할 수 있습니다.");
+    } else {
+      setTodo((prev) => ({
+        ...prev,
+        content: "",
+      }));
 
-    newTodo();
+      newTodo();
+    }
   };
 
   return (

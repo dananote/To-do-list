@@ -1,26 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled, css } from "styled-components";
 import TodoButton from "./TodoButton";
 import { useRecoilValue } from "recoil";
 import checkMobile from "../atom/checkMobile";
+import checkd from "../asset/check.png";
+import todoAPI from "../api/todoAPI";
+import { useRecoilState } from "recoil";
+import checkChange from "../atom/checkChange";
 
-const TodoBox = () => {
+const TodoBox = ({ content, date, isCompleted, id }) => {
+  const { deleteTodo, updateTodo } = todoAPI();
+  const [isChange, setIsChange] = useRecoilState(checkChange);
   const isMobile = useRecoilValue(checkMobile);
+  const [isUpdate, setIsUpdate] = useState(true);
+
+  const handleDelete = async (id) => {
+    await deleteTodo(id);
+    setIsChange((prev) => !prev);
+  };
+
+  const handleComplete = async (id, content, isCompleted) => {
+    const changeTodo = { content: content, isCompleted: !isCompleted };
+    await updateTodo(changeTodo, id);
+    setIsChange((prev) => !prev);
+  };
+
+  const handleChange = () => {
+    setIsUpdate((prev) => !prev);
+  };
+
   return (
-    <STodoBox isMobile={isMobile}>
-      <SCheck />
-      <STextWrap isMobile={isMobile}>
-        <span>2023-08-23 13:00</span>
-        <span>
-          내용을 입력한 후, 오른쪽에 [할 일 추가]를 클랙해 주세요.내용을 입력한
-          후, 오른쪽에 [할 일 추가]를 클랙해 주세요.내용을 입력한 후, 오른쪽에
-          [할 일 추가]를 클랙해 주세요.
-        </span>
+    <STodoBox isMobile={isMobile} isUpdate={isUpdate}>
+      <SCheck
+        isCompleted={isCompleted}
+        onClick={() => {
+          handleComplete(id, content, isCompleted);
+        }}
+      />
+      <STextWrap isMobile={isMobile} isCompleted={isCompleted}>
+        <span>{date}</span>
+        {isUpdate ? <SUpdateInput value={content} /> : <span>{content}</span>}
       </STextWrap>
-      <SButtonWrap>
-        <TodoButton children="수정" color="--dark-700" />
-        <TodoButton children="삭재" color="--dark-600" />
-      </SButtonWrap>
+      {isUpdate ? (
+        <SButtonWrap>
+          <TodoButton
+            children="저장"
+            color="--primary-color"
+            onClick={handleChange}
+          />
+          <TodoButton children="취소" color="--dark-600" onClick={() => {}} />
+        </SButtonWrap>
+      ) : (
+        <SButtonWrap>
+          <TodoButton
+            children="수정"
+            color="--dark-700"
+            onClick={handleChange}
+          />
+          <TodoButton
+            children="삭제"
+            color="--dark-600"
+            onClick={() => {
+              handleDelete(id);
+            }}
+          />
+        </SButtonWrap>
+      )}
     </STodoBox>
   );
 };
@@ -33,6 +78,7 @@ const STodoBox = styled.li`
   box-sizing: border-box;
   display: flex;
   gap: 24px;
+  border: ${(props) => (props.isUpdate ? "1px solid var(--dark-600)" : "none")};
 
   & + & {
     margin-top: 24px;
@@ -51,6 +97,13 @@ const SCheck = styled.div`
   flex-shrink: 0;
   border: 1px solid var(--primary-color);
   border-radius: 50px;
+  cursor: pointer;
+
+  ${(props) =>
+    props.isCompleted &&
+    css`
+      background: no-repeat center/cover url(${checkd}) var(--primary-color);
+    `}
 `;
 
 const STextWrap = styled.div`
@@ -68,6 +121,12 @@ const STextWrap = styled.div`
     margin-bottom: 8px;
   }
 
+  span:nth-child(2) {
+    color: ${(props) => (props.isCompleted ? "var(--dark-600)" : "white")};
+    text-decoration: ${(props) =>
+      props.isCompleted ? "line-through" : "none"};
+  }
+
   ${(props) =>
     props.isMobile &&
     css`
@@ -82,6 +141,13 @@ const STextWrap = styled.div`
 const SButtonWrap = styled.div`
   display: flex;
   flex-shrink: 0;
+`;
+
+const SUpdateInput = styled.input`
+  width: 100%;
+  background-color: var(--dark-700);
+  color: white;
+  font-size: 16px;
 `;
 
 export default TodoBox;

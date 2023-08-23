@@ -1,10 +1,9 @@
 import React from "react";
 import { styled } from "styled-components";
 
-const TodoButton = ({ children, type, color }) => {
-  console.log(color);
+const TodoButton = ({ children, type, color, onClick }) => {
   return (
-    <STodoButton type={type ? type : "button"} color={color}>
+    <STodoButton type={type ? type : "button"} color={color} onClick={onClick}>
       {children}
     </STodoButton>
   );

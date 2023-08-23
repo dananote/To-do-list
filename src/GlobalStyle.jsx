@@ -12,6 +12,7 @@ const GlobalStyle = createGlobalStyle`
         --dark-700: #312F49;
         --dark-600: #656380;
         --dark-500: #908EAE;
+        --save-color: #3932AD;
     }
 
     body {

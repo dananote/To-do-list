@@ -44,7 +44,6 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
     });
   };
 
-  // 수정때 content내용 따로 관리
   const handleSubmit = async (updateTodoData) => {
     await updateTodo(updateTodoData, id);
     setIsupdate(false);
@@ -109,6 +108,9 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
               handleSubmit(changeTodo);
             }}
             border="--primary-color"
+            disabled={
+              changeTodo.content === "" || changeTodo.content === content
+            }
           />
           <TodoButton
             children="취소"

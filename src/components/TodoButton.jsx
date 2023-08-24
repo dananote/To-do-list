@@ -1,13 +1,14 @@
 import React from "react";
 import { styled } from "styled-components";
 
-const TodoButton = ({ children, type, color, onClick, border }) => {
+const TodoButton = ({ children, type, color, onClick, border, disabled }) => {
   return (
     <STodoButton
       type={type ? type : "button"}
       color={color}
       onClick={onClick}
       border={border}
+      disabled={disabled ? true : false}
     >
       {children}
     </STodoButton>
@@ -34,6 +35,12 @@ const STodoButton = styled.button`
 
   &:active {
     transform: scale(0.95);
+  }
+
+  &:disabled {
+    background-color: #42405c;
+    color: var(--dark-500);
+    border: 1px solid #42405c;
   }
 `;
 

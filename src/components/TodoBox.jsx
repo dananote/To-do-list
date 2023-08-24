@@ -9,7 +9,7 @@ import { useRecoilState } from "recoil";
 import checkChange from "../atom/checkChange";
 
 const TodoBox = ({ content, date, isCompleted, id }) => {
-  const { deleteTodo, updateTodo } = todoAPI();
+  const { deleteTodo, updateTodo, getTodoOne } = todoAPI();
   const [isChange, setIsChange] = useRecoilState(checkChange);
   const ismobile = useRecoilValue(checkMobile);
   const [isupdate, setIsupdate] = useState(false);
@@ -45,9 +45,16 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
   };
 
   const handleSubmit = async (updateTodoData) => {
-    await updateTodo(updateTodoData, id);
-    setIsupdate(false);
-    setIsChange((prev) => !prev);
+    const result = await getTodoOne(id);
+
+    if (result.hasOwnProperty("message")) {
+      alert("이미 삭제된 [할 일]입니다.");
+      setIsChange((prev) => !prev);
+    } else {
+      await updateTodo(updateTodoData, id);
+      setIsupdate(false);
+      setIsChange((prev) => !prev);
+    }
   };
 
   const inputText = (e) => {

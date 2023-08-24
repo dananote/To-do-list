@@ -35,7 +35,16 @@ const todoAPI = () => {
         }
     }
 
-    return { createTodo, updateTodo, deleteTodo, getTodo }
+    const getTodoOne = async (id) => {
+        try {
+            const res = await Instance.get(`/${id}`);
+            return res.data
+        } catch (error) {
+            return error.response.data.error;
+        }
+    }
+
+    return { createTodo, updateTodo, deleteTodo, getTodo, getTodoOne }
 }
 
 export default todoAPI;

@@ -7,6 +7,7 @@ const Input = ({ setTodo, todo }) => {
   useEffect(() => {
     focusInput.current.focus();
   }, []);
+
   const handleTodo = (e) => {
     const text = e.target.value;
 

@@ -14,41 +14,88 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
   const ismobile = useRecoilValue(checkMobile);
   const [isupdate, setIsupdate] = useState(false);
   const updateInput = useRef();
+  const [changeTodo, setChangeTodo] = useState({
+    content: "",
+    isCompleted: "",
+  });
 
   const handleDelete = async (id) => {
-    await deleteTodo(id);
-    setIsChange((prev) => !prev);
+    const check = window.confirm("정말 삭제하시겠습니까?");
+
+    if (check) {
+      await deleteTodo(id);
+      setIsChange((prev) => !prev);
+    }
+  };
+
+  const handleComplet = () => {
+    setChangeTodo((prev) => {
+      const updateTodoData = {
+        ...prev,
+        content: content,
+        isCompleted: !prev.isCompleted,
+      };
+
+      if (updateTodoData) {
+        handleSubmit(updateTodoData);
+      }
+
+      return updateTodoData;
+    });
   };
 
   // 수정때 content내용 따로 관리
-  const handleComplete = async (id, content, isCompleted) => {
-    const changeTodo = { content: content, isCompleted: !isCompleted };
-    await updateTodo(changeTodo, id);
+  const handleSubmit = async (updateTodoData) => {
+    await updateTodo(updateTodoData, id);
+    setIsupdate(false);
     setIsChange((prev) => !prev);
   };
 
+  const inputText = (e) => {
+    setChangeTodo((prev) => ({
+      ...prev,
+      content: e.target.value,
+    }));
+  };
+
+  const handleCancle = () => {
+    setChangeTodo((prev) => ({
+      ...prev,
+      content: content,
+    }));
+    setIsupdate(false);
+  };
+
   const handleChange = () => {
-    setIsupdate((prev) => !prev);
+    setIsupdate(true);
+    setChangeTodo((prev) => ({
+      ...prev,
+      content: content,
+    }));
   };
 
   useEffect(() => {
+    setChangeTodo((prev) => ({
+      ...prev,
+      content: content,
+      isCompleted: isCompleted,
+    }));
     if (isupdate) {
       updateInput.current.focus();
     }
-  }, [isupdate]);
+  }, [isupdate, isChange]);
 
   return (
     <STodoBox ismobile={ismobile} isupdate={isupdate}>
-      <SCheck
-        isCompleted={isCompleted}
-        onClick={() => {
-          handleComplete(id, content, isCompleted);
-        }}
-      />
+      <SCheck isCompleted={isCompleted} onClick={handleComplet} />
       <STextWrap ismobile={ismobile} isCompleted={isCompleted}>
         <span>{date}</span>
         {isupdate ? (
-          <SUpdateInput value={content} ref={updateInput} />
+          <SUpdateInput
+            ref={updateInput}
+            onChange={inputText}
+            value={changeTodo.content}
+          />
         ) : (
           <span>{content}</span>
         )}
@@ -58,13 +105,15 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
           <TodoButton
             children="저장"
             color="--primary-color"
-            onClick={handleChange}
+            onClick={() => {
+              handleSubmit(changeTodo);
+            }}
             border="--primary-color"
           />
           <TodoButton
             children="취소"
             color="--dark-600"
-            onClick={handleChange}
+            onClick={handleCancle}
           />
         </SButtonWrap>
       ) : (

@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { styled } from "styled-components";
 
 const Input = ({ setTodo, todo }) => {
+  const focusInput = useRef();
+
+  useEffect(() => {
+    focusInput.current.focus();
+  }, []);
   const handleTodo = (e) => {
     const text = e.target.value;
 
@@ -24,6 +29,7 @@ const Input = ({ setTodo, todo }) => {
       onChange={handleTodo}
       value={todo.content}
       placeholder="내용을 입력한 후, 오른쪽에 [할 일 추가]를 클릭해 주세요."
+      ref={focusInput}
     ></SInput>
   );
 };
@@ -38,6 +44,10 @@ const SInput = styled.input`
 
   &::placeholder {
     color: var(--dark-600);
+  }
+
+  &:focus {
+    outline: 1px solid var(--primary-color);
   }
 `;
 

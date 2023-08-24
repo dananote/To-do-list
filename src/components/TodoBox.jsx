@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { styled, css } from "styled-components";
 import TodoButton from "./TodoButton";
 import { useRecoilValue } from "recoil";
@@ -11,14 +11,16 @@ import checkChange from "../atom/checkChange";
 const TodoBox = ({ content, date, isCompleted, id }) => {
   const { deleteTodo, updateTodo } = todoAPI();
   const [isChange, setIsChange] = useRecoilState(checkChange);
-  const isMobile = useRecoilValue(checkMobile);
-  const [isUpdate, setIsUpdate] = useState(true);
+  const ismobile = useRecoilValue(checkMobile);
+  const [isupdate, setIsupdate] = useState(false);
+  const updateInput = useRef();
 
   const handleDelete = async (id) => {
     await deleteTodo(id);
     setIsChange((prev) => !prev);
   };
 
+  // 수정때 content내용 따로 관리
   const handleComplete = async (id, content, isCompleted) => {
     const changeTodo = { content: content, isCompleted: !isCompleted };
     await updateTodo(changeTodo, id);
@@ -26,29 +28,44 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
   };
 
   const handleChange = () => {
-    setIsUpdate((prev) => !prev);
+    setIsupdate((prev) => !prev);
   };
 
+  useEffect(() => {
+    if (isupdate) {
+      updateInput.current.focus();
+    }
+  }, [isupdate]);
+
   return (
-    <STodoBox isMobile={isMobile} isUpdate={isUpdate}>
+    <STodoBox ismobile={ismobile} isupdate={isupdate}>
       <SCheck
         isCompleted={isCompleted}
         onClick={() => {
           handleComplete(id, content, isCompleted);
         }}
       />
-      <STextWrap isMobile={isMobile} isCompleted={isCompleted}>
+      <STextWrap ismobile={ismobile} isCompleted={isCompleted}>
         <span>{date}</span>
-        {isUpdate ? <SUpdateInput value={content} /> : <span>{content}</span>}
+        {isupdate ? (
+          <SUpdateInput value={content} ref={updateInput} />
+        ) : (
+          <span>{content}</span>
+        )}
       </STextWrap>
-      {isUpdate ? (
+      {isupdate ? (
         <SButtonWrap>
           <TodoButton
             children="저장"
             color="--primary-color"
             onClick={handleChange}
+            border="--primary-color"
           />
-          <TodoButton children="취소" color="--dark-600" onClick={() => {}} />
+          <TodoButton
+            children="취소"
+            color="--dark-600"
+            onClick={handleChange}
+          />
         </SButtonWrap>
       ) : (
         <SButtonWrap>
@@ -78,14 +95,15 @@ const STodoBox = styled.li`
   box-sizing: border-box;
   display: flex;
   gap: 24px;
-  border: ${(props) => (props.isUpdate ? "1px solid var(--dark-600)" : "none")};
+  border: ${(props) =>
+    props.isupdate ? "1.5px solid var(--dark-600)" : "none"};
 
   & + & {
     margin-top: 24px;
   }
 
   ${(props) =>
-    props.isMobile &&
+    props.ismobile &&
     css`
       flex-direction: column;
     `}
@@ -128,7 +146,7 @@ const STextWrap = styled.div`
   }
 
   ${(props) =>
-    props.isMobile &&
+    props.ismobile &&
     css`
       white-space: pre-wrap;
 
@@ -143,11 +161,19 @@ const SButtonWrap = styled.div`
   flex-shrink: 0;
 `;
 
-const SUpdateInput = styled.input`
+const SUpdateInput = styled.textarea`
   width: 100%;
   background-color: var(--dark-700);
   color: white;
   font-size: 16px;
+  border: none;
+  outline-color: var(--dark-700);
+  resize: none;
+  font-size: 17px;
+
+  &:focus {
+    outline: 0;
+  }
 `;
 
 export default TodoBox;

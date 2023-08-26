@@ -12,7 +12,7 @@ import Modal from "./Modal";
 const CreateTodo = () => {
   const isMobile = useRecoilValue(checkMobile);
   const isCount = useRecoilValue(checkCount);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [isAlert, setIsAlert] = useState(false);
   const { createTodo } = todoAPI();
   const [todo, setTodo] = useState({ content: "" });

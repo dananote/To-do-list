@@ -81,8 +81,80 @@
 - 노출된 modal에서 삭제버튼 클릭시 서버에 DELETE 요청하고 <code>showModal</code>상태를 false처리 한 뒤 <code>checkChange</code>값을 변경하여 화면 렌더링
 - 취소 버튼을 누르면<code>showModal</code>상태만 false로 변경
 
-• 프로젝트 구조 소개
-• 구현 방법에 대한 설명
-• 개발 환경
-• 빌드 & 실행 방법
-• 기타 필요한 부가설명이 있다면 작성해주세요.
+<br />
+
+<strong>Todo 10개까지만 등록</strong>
+
+<img src="https://github.com/dananote/To-do-list/assets/124513796/b086b783-9ec8-41ac-9d1a-449dd5889641" style="max-width: 600px;"/>
+
+- 현재 노출되어있는 Todo list의 갯수를 체크하여 10개가 넘어가면 modal을 노출하여 더이상 등록할 수 없게 안내
+
+<br />
+
+<strong>글자수 제한 및 넘치는 글씨 관리</strong>
+
+<img src="https://github.com/dananote/To-do-list/assets/124513796/d59def00-f858-430e-8f14-e6e2cc7d5dd8" style="max-width: 600px;"/>
+
+- 입력중인 글자수를 계속 체크하여 50자가 넘어가면 <code>substr</code>메서드를 사용하여 50자까지 자른 다음 <code>input</code>태그 값으로 바로 집어넣어 50자 이상 못치게 방지
+- 부모에서 넘치는 글씨는 <code>ellipsis</code>를 주어 자연스럽게 끊기게 스타일링
+
+<br />
+
+<strong>반응형 처리</strong>
+
+<img src="https://github.com/dananote/To-do-list/assets/124513796/1231bcf5-aa6d-475e-bd19-cd3212ff781c" style="max-width: 600px;"/>
+
+- react-reponsive를 이용하여 view 넓이값이 800px이하일때는 <code>isMobile</code>값을 true로 변경하고 <code>Rcecoil</code>로 전역관리
+- 좁은 모바일 화면을 고려하여 새로운 Todo를 입력하는 인풋창과 버튼을 <code>flex-direction</code>을 <code>column</code>처리 그 외에 <code>todoBox</code>안의 스타일도 모바일에서 보기 편하도록 조건부 css처리
+
+<br />
+
+## 📁 3. 프로젝트 구조 소개
+
+```
+📁 rhotaehee-project
+├──📁 node_modules
+├──📁 public
+├──📁 src
+│   ├──📁 api
+│   │   ├──📄 instance.js
+│   │   └──📄 todoAPI.js
+│   ├──📁 asset
+│   ├──📁 atom
+│   ├──📁 Components
+│   │   ├──📄 Button.jsx
+│   │   ├──📄 Input.jsx
+│   │   ├──📄 Modal.jsx
+│   │   ├──📄 CreateTodo.jsx
+│   │   ├──📄 TodoButton.jsx
+│   │   ├──📄 TodoBox.jsx
+│   │   └──📄 TodoList.jsx
+│   ├──📁 pages
+│   ├──📄 App.js
+│   ├──📄 GlobalStyle.jsx
+│   ├──📄 index.js
+│   └──📄 Layout.jsx
+├──📄 .gitignore
+├──📄 package-lock.json
+├──📄 package.json
+└──📄 README.md
+```
+
+<br />
+
+## 📁 4. 빌드 & 실행 방법
+
+### 설치
+
+```
+git clone https://github.com/dananote/To-do-list.git
+npm install
+```
+
+### 실행
+
+```
+npm start
+```
+
+<strong>배포:</strong> https://mailplugtodo.netlify.app/

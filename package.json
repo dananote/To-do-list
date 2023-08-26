@@ -1,5 +1,6 @@
 {
   "name": "rhotaehee-project",
+  "homepage": "https://mailplugtodo.netlify.app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

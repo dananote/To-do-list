@@ -7,26 +7,32 @@ import checkd from "../asset/check.png";
 import todoAPI from "../api/todoAPI";
 import { useRecoilState } from "recoil";
 import checkChange from "../atom/checkChange";
+import Modal from "./Modal";
 
 const TodoBox = ({ content, date, isCompleted, id }) => {
-  const { deleteTodo, updateTodo, getTodoOne } = todoAPI();
+  const { updateTodo, getTodoOne } = todoAPI();
   const [isChange, setIsChange] = useRecoilState(checkChange);
   const ismobile = useRecoilValue(checkMobile);
   const [isupdate, setIsupdate] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const updateInput = useRef();
   const [changeTodo, setChangeTodo] = useState({
     content: "",
     isCompleted: "",
   });
+  const [isAlert, setIsAlert] = useState(false);
 
-  const handleDelete = async (id) => {
-    const check = window.confirm("정말 삭제하시겠습니까?");
+  const getDate = (date) => {
+    const inputDate = new Date(date);
+    inputDate.setHours(inputDate.getHours() + 9);
+    const formattedDate = inputDate
+      .toISOString()
+      .slice(0, 16)
+      .replace("T", " ");
 
-    if (check) {
-      await deleteTodo(id);
-      setIsChange((prev) => !prev);
-    }
+    return formattedDate;
   };
+  console.log(showModal);
 
   const handleComplet = () => {
     setChangeTodo((prev) => {
@@ -46,10 +52,10 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
 
   const handleSubmit = async (updateTodoData) => {
     const result = await getTodoOne(id);
+    setIsAlert(true);
 
     if (result.hasOwnProperty("message")) {
-      alert("이미 삭제된 [할 일]입니다.");
-      setIsChange((prev) => !prev);
+      setShowModal(true);
     } else {
       await updateTodo(updateTodoData, id);
       setIsupdate(false);
@@ -93,9 +99,17 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
 
   return (
     <STodoBox ismobile={ismobile} isupdate={isupdate}>
+      {showModal && (
+        <Modal
+          id={id}
+          setShowModal={setShowModal}
+          setIsAlert={setIsAlert}
+          isAlert={isAlert}
+        />
+      )}
       <SCheck isCompleted={isCompleted} onClick={handleComplet} />
       <STextWrap ismobile={ismobile} isCompleted={isCompleted}>
-        <span>{date}</span>
+        <span>{getDate(date)}</span>
         {isupdate ? (
           <SUpdateInput
             ref={updateInput}
@@ -135,9 +149,7 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
           <TodoButton
             children="삭제"
             color="--dark-600"
-            onClick={() => {
-              handleDelete(id);
-            }}
+            onClick={() => setShowModal(true)}
           />
         </SButtonWrap>
       )}

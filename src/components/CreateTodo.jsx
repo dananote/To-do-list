@@ -7,10 +7,13 @@ import todoAPI from "../api/todoAPI";
 import { useRecoilState, useRecoilValue } from "recoil";
 import checkCount from "../atom/checkCount";
 import checkChange from "../atom/checkChange";
+import Modal from "./Modal";
 
 const CreateTodo = () => {
   const isMobile = useRecoilValue(checkMobile);
   const isCount = useRecoilValue(checkCount);
+  const [showModal, setShowModal] = useState(true);
+  const [isAlert, setIsAlert] = useState(false);
   const { createTodo } = todoAPI();
   const [todo, setTodo] = useState({ content: "" });
   const [isChange, setIsChange] = useRecoilState(checkChange);
@@ -23,7 +26,8 @@ const CreateTodo = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isCount === 10) {
-      alert("[할 일]은 최대 10개까지 등록할 수 있습니다.");
+      setIsAlert(true);
+      setShowModal(true);
     } else {
       setTodo((prev) => ({
         ...prev,
@@ -36,6 +40,14 @@ const CreateTodo = () => {
 
   return (
     <SCreateTodo isMobile={isMobile} onSubmit={handleSubmit}>
+      {showModal && (
+        <Modal
+          isAlert={isAlert}
+          setIsAlert={setIsAlert}
+          setShowModal={setShowModal}
+          modalText="[할 일]은 최대 10개까지 등록할 수 있습니다."
+        />
+      )}
       <Input setTodo={setTodo} todo={todo} />
       <Button children="할 일 추가" disabled={todo.content} />
     </SCreateTodo>

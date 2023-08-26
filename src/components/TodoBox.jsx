@@ -105,6 +105,7 @@ const TodoBox = ({ content, date, isCompleted, id }) => {
           setShowModal={setShowModal}
           setIsAlert={setIsAlert}
           isAlert={isAlert}
+          modalText="이미 삭제된 [할 일]입니다."
         />
       )}
       <SCheck isCompleted={isCompleted} onClick={handleComplet} />

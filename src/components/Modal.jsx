@@ -5,7 +5,7 @@ import todoAPI from "../api/todoAPI";
 import { useRecoilState } from "recoil";
 import checkChange from "../atom/checkChange";
 
-const Modal = ({ id, setShowModal, setIsAlert, isAlert }) => {
+const Modal = ({ id, setShowModal, setIsAlert, isAlert, modalText }) => {
   const { deleteTodo } = todoAPI();
   const [isChange, setIsChange] = useRecoilState(checkChange);
   console.log(isAlert);
@@ -28,9 +28,7 @@ const Modal = ({ id, setShowModal, setIsAlert, isAlert }) => {
   return (
     <SModalBg>
       <SModalLayout>
-        <p>
-          {isAlert ? "이미 삭제된 [할 일]입니다" : "정말 삭제하시겠습니까?"}
-        </p>
+        <p>{isAlert ? modalText : "정말 삭제하시겠습니까?"}</p>
         {isAlert ? (
           <TodoButton
             children="확인"
@@ -82,6 +80,7 @@ const SModalLayout = styled.article`
   p {
     margin-bottom: 32px;
     font-size: 18px;
+    line-height: 1.6;
   }
 `;
 

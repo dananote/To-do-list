@@ -22,7 +22,7 @@ function App() {
       <GlobalStyle />
       <Layout isMobile={Mobile}>
         <Routes>
-          <Route path="/" element={<Todo />} />
+          <Route path="" element={<Todo />} />
         </Routes>
       </Layout>
     </>

@@ -44,8 +44,7 @@
 <img src="https://github.com/dananote/To-do-list/assets/124513796/cdf16128-54b9-4719-b190-a7715fd970cd" style="max-width: 600px;"/>
 
 - <code>changeTodo</code> 상태를 따리 관리하여 체크박스 클릭시 현재의 반대 되는 상태로 변경
-- 변경이 완료된 내용이 state에 담긴뒤 조건문으로 변경된 내용이 담겼다면 서버에 PATC
-- H 되도록 설정
+- 변경이 완료된 내용이 state에 담긴뒤 조건문으로 변경된 내용이 담겼다면 서버에 PATCH 되도록 설정
 - true/false 상태에 따라 스타일 변경
 
 <br />
@@ -147,8 +146,10 @@
 ### 설치
 
 ```
+docker run -d -p 8080:8080 mailplug/todo-api
 git clone https://github.com/dananote/To-do-list.git
 npm install
+
 ```
 
 ### 실행
